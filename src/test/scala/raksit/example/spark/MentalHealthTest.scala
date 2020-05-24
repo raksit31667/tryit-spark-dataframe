@@ -6,9 +6,9 @@ import org.scalatest.FunSuite
 
 class MentalHealthTest extends FunSuite with SharedSparkContext {
 
-  test("should contain 1260 records") {
+  test("should contain 1259 records") {
     val dataFrame: DataFrame = MentalHealth.main()
 
-    assert(dataFrame.count() === 1260)
+    assert(dataFrame.count() === 1259)
   }
 }
