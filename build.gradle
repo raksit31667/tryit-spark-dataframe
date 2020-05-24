@@ -47,6 +47,7 @@ dependencies {
     compile 'org.apache.spark:spark-core_2.11:2.1.0'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    testCompile group: 'com.holdenkarau', name: 'spark-testing-base_2.11', version: '2.1.0_0.14.0'
 }
 
 task run(type: JavaExec, dependsOn: classes) {
