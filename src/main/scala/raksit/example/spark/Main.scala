@@ -2,9 +2,6 @@ package raksit.example.spark
 
 import org.apache.spark.sql.functions._
 
-final case class Person(firstName: String, lastName: String,
-                        country: String, age: Int)
-
 object Main extends InitSpark {
   def main(args: Array[String]) = {
     import spark.implicits._
