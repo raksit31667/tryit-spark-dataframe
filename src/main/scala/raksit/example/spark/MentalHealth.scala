@@ -7,6 +7,7 @@ object MentalHealth extends InitSpark {
 
   def getTreatmentByGender: DataFrame = {
 
+    // Source: https://www.kaggle.com/osmi/mental-health-in-tech-survey
     val mentalHealthDataFrame: DataFrame = spark.read
       .option("header", "true")
       .option("inferSchema", "true")
