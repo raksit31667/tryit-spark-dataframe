@@ -1,5 +1,5 @@
 # _Spark-Gradle-Template_
-A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sc` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
+A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sparkContext` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
 
 ## Prerequisites
 - [Java](https://java.com/en/download/)
@@ -39,7 +39,7 @@ In this class, I do 4 things
 trait InitSpark {
   val spark: SparkSession = SparkSession.builder().appName("Spark example").master("local[*]")
                             .config("spark.some.config.option", "some-value").getOrCreate()
-  val sc = spark.sparkContext
+  val sparkContext = spark.sparkContext
   val sqlContext = spark.sqlContext
   def reader = spark.read.option("header",true).option("inferSchema", true).option("mode", "DROPMALFORMED")
   def readerWithoutHeader = spark.read.option("header",true).option("inferSchema", true).option("mode", "DROPMALFORMED")

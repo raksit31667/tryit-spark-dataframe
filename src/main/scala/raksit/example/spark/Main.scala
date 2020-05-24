@@ -1,4 +1,4 @@
-package template.spark
+package raksit.example.spark
 
 import org.apache.spark.sql.functions._
 
@@ -19,7 +19,7 @@ object Main extends InitSpark {
     val persons = reader.csv("people-example.csv").as[Person]
     persons.show(2)
     val averageAge = persons.agg(avg("age"))
-                     .first.get(0).asInstanceOf[Double]
+      .first.get(0).asInstanceOf[Double]
     println(f"Average Age: $averageAge%.2f")
 
     close
