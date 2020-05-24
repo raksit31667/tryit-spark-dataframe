@@ -9,6 +9,6 @@ object GenderParser {
     case "male" | "m" | "male-ish" | "maile" | "mal" | "male (cis)" | "make" |
           "male " | "man" | "msle" | "mail" | "malr" | "cis man" | "cis male" => "Male"
 
-    case _ => ""
+    case _ => "Transgender"
   }
 }

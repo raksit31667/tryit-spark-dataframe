@@ -45,4 +45,24 @@ class MentalHealthTest extends FunSuite with SharedSparkContext {
       .select("No").collect().toSeq
     assert(actual.head.get(0) === 541)
   }
+
+  test("should return 17 yes when getTreatmentByGender given gender is transgender") {
+    // When
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+
+    // Then
+    val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Transgender"))
+      .select("Yes").collect().toSeq
+    assert(actual.head.get(0) === 17)
+  }
+
+  test("should return 4 no when getTreatmentByGender given gender is transgender") {
+    // When
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+
+    // Then
+    val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Transgender"))
+      .select("No").collect().toSeq
+    assert(actual.head.get(0) === 4)
+  }
 }
