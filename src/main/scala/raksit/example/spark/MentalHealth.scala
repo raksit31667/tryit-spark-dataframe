@@ -1,10 +1,11 @@
 package raksit.example.spark
 
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions._
 
 object MentalHealth extends InitSpark {
 
-  def main(): DataFrame = {
+  def getTreatmentByGender: DataFrame = {
 
     val mentalHealthDataFrame: DataFrame = spark.read
       .option("header", "true")
@@ -13,6 +14,19 @@ object MentalHealth extends InitSpark {
       .option("timestampFormat", "yyyy-MM-dd'T'HH:mm:ss")
       .option("mode", "failfast")
       .csv(getClass.getResource("/mental-health.csv").toString)
-    mentalHealthDataFrame
+
+    val treatmentAllGenderDataFrame: DataFrame = mentalHealthDataFrame.select(col("Gender"),
+      when(col("treatment").equalTo("Yes"), 1).otherwise(0).alias("all-Yes"),
+      when(col("treatment").equalTo("No"), 1).otherwise(0).alias("all-No"))
+
+    val parseGenderUserDefinedFunction = udf(GenderParser.parse _)
+
+    val treatmentByGenderDataFrame: DataFrame = treatmentAllGenderDataFrame.select(
+      parseGenderUserDefinedFunction(col("Gender")).alias("Gender"),
+      col("all-Yes"), col("all-No"))
+
+    treatmentByGenderDataFrame.groupBy("Gender")
+      .agg(sum("all-Yes").alias("Yes"),
+        sum("all-No").alias("No"))
   }
 }
