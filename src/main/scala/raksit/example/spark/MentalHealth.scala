@@ -5,7 +5,7 @@ import org.apache.spark.sql.functions._
 
 object MentalHealth extends InitSpark {
 
-  def getTreatmentByGender: DataFrame = {
+  def getTreatmentByGender(csvPath: String): DataFrame = {
 
     // Source: https://www.kaggle.com/osmi/mental-health-in-tech-survey
     val mentalHealthDataFrame: DataFrame = spark.read
@@ -14,7 +14,7 @@ object MentalHealth extends InitSpark {
       .option("nullValue", "NA")
       .option("timestampFormat", "yyyy-MM-dd'T'HH:mm:ss")
       .option("mode", "failfast")
-      .csv(getClass.getResource("/mental-health.csv").toString)
+      .csv(getClass.getResource(csvPath).toString)
 
     val treatmentAllGenderDataFrame: DataFrame = mentalHealthDataFrame.select(col("Gender"),
       when(col("treatment").equalTo("Yes"), 1).otherwise(0).alias("all-Yes"),

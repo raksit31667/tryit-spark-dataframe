@@ -9,7 +9,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 170 yes when getTreatmentByGender given gender is female") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Female"))
@@ -19,7 +19,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 77 no when getTreatmentByGender given gender is female") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Female"))
@@ -29,7 +29,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 450 yes when getTreatmentByGender given gender is male") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Male"))
@@ -39,7 +39,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 541 no when getTreatmentByGender given gender is male") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Male"))
@@ -49,7 +49,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 17 yes when getTreatmentByGender given gender is transgender") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Transgender"))
@@ -59,7 +59,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return 4 no when getTreatmentByGender given gender is transgender") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val actual = actualDataFrame.filter(row => row.getAs[String]("Gender").equals("Transgender"))
@@ -69,7 +69,7 @@ class MentalHealthTest extends FunSuite with DataFrameSuiteBase {
 
   test("should return dataframe with gender and total yes-no counts when getTreatmentByGender") {
     // When
-    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender
+    val actualDataFrame: DataFrame = MentalHealth.getTreatmentByGender("/mental_health.csv")
 
     // Then
     val expectedSchema: StructType = StructType(List(StructField("Gender", StringType), StructField("Yes", LongType), StructField("No", LongType)))
