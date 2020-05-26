@@ -1,0 +1,38 @@
+[
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate": [
+      {
+        "key": "k1",
+        "value": "v1"
+      },
+      {
+        "key": "k2",
+        "value": "v2"
+      }
+    ],
+    "DATA_MLrate": "31",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  },
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate": [
+      {
+        "key": "k3",
+        "value": "v3"
+      },
+      {
+        "key": "k4",
+        "value": "v4"
+      }
+    ],
+    "DATA_MLrate": "33",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  }
+]
