@@ -1,0 +1,42 @@
+[
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate_key": "k1",
+    "DATA_Crate_value": "v1",
+    "DATA_MLrate": "31",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  },
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate_key": "k2",
+    "DATA_Crate_value": "v2",
+    "DATA_MLrate": "31",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  },
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate_key": "k3",
+    "DATA_Crate_value": "v3",
+    "DATA_MLrate": "33",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  },
+  {
+    "CHECK_Check1": 1,
+    "CHECK_Check2": "TWO",
+    "COL": 21,
+    "DATA_Crate_key": "k4",
+    "DATA_Crate_value": "v4",
+    "DATA_MLrate": "33",
+    "IFAM": "EQR",
+    "KTM": 1548176931466
+  }
+]
