@@ -33,9 +33,9 @@ repositories {
 }
 
 dependencies {
-    implementation "org.scala-lang:scala-library:"+scalaVersion
-    implementation "org.scala-lang:scala-reflect:"+scalaVersion
-    implementation "org.scala-lang:scala-compiler:"+scalaVersion
+    implementation "org.scala-lang:scala-library:${scalaVersion}"
+    implementation "org.scala-lang:scala-reflect:${scalaVersion}"
+    implementation "org.scala-lang:scala-compiler:${scalaVersion}"
 
     implementation "org.apache.spark:spark-mllib_2.11:${sparkVersion}"
     implementation "org.apache.spark:spark-sql_2.11:${sparkVersion}"
