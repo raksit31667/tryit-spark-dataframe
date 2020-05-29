@@ -1,14 +1,14 @@
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id "java"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
 }
 
-group 'raksit.example.spark'
-version '1.0-SNAPSHOT'
+group "raksit.example.spark"
+version "1.0-SNAPSHOT"
 
-apply plugin: 'java'
-apply plugin: 'scala'
-apply plugin: 'idea'
+apply plugin: "java"
+apply plugin: "scala"
+apply plugin: "idea"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -37,17 +37,17 @@ dependencies {
     implementation "org.scala-lang:scala-reflect:"+scalaVersion
     implementation "org.scala-lang:scala-compiler:"+scalaVersion
 
-    implementation 'org.apache.spark:spark-mllib_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-sql_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-streaming-flume-assembly_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-graphx_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-launcher_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-catalyst_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-streaming_2.11:2.1.0'
-    implementation 'org.apache.spark:spark-core_2.11:2.1.0'
+    implementation "org.apache.spark:spark-mllib_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-sql_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-streaming-flume-assembly_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-graphx_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-launcher_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-catalyst_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-streaming_2.11:${sparkVersion}"
+    implementation "org.apache.spark:spark-core_2.11:${sparkVersion}"
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
-    testImplementation group: 'com.holdenkarau', name: 'spark-testing-base_2.11', version: '2.1.0_0.14.0'
+    implementation group: "commons-io", name: "commons-io", version: "2.5"
+    testImplementation group: "com.holdenkarau", name: "spark-testing-base_2.11", version: "${sparkVersion}_0.14.0"
 }
 
 task run(type: JavaExec, dependsOn: classes) {
@@ -57,19 +57,19 @@ task run(type: JavaExec, dependsOn: classes) {
 }
 
 jar {
-    archiveClassifier.set('all')
+    archiveClassifier.set("all")
     manifest {
-        attributes 'Implementation-Title': title,
-                'Implementation-Version': getArchiveVersion(),
-                'Main-Class': mainClassFile
+        attributes "Implementation-Title": title,
+                "Implementation-Version": getArchiveVersion(),
+                "Main-Class": mainClassFile
     }
     include{sourceSets.main.output.classesDir}
     zip64 true
 }
 
 shadowJar {
-    archiveClassifier.set('shadow')
-    append 'reference.conf'
+    archiveClassifier.set("shadow")
+    append "reference.conf"
     dependencies {
 
     }
