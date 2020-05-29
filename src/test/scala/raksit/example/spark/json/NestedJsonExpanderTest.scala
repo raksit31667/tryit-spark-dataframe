@@ -1,8 +1,8 @@
-package raksit.example.spark
+package raksit.example.spark.json
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
-import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}
+import org.apache.spark.sql.{DataFrame, Row}
 import org.scalatest.FunSuite
 
 class NestedJsonExpanderTest extends FunSuite with DataFrameSuiteBase {

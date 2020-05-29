@@ -1,7 +1,8 @@
-package raksit.example.spark
+package raksit.example.spark.mentalhealth
 
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.{col, sum, udf, when}
+import raksit.example.spark.InitSpark
 
 object MentalHealth extends InitSpark {
 

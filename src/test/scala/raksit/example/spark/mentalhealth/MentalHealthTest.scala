@@ -1,4 +1,4 @@
-package raksit.example.spark
+package raksit.example.spark.mentalhealth
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}

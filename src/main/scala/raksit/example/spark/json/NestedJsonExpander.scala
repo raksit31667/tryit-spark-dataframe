@@ -1,8 +1,9 @@
-package raksit.example.spark
+package raksit.example.spark.json
 
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{col, explode}
 import org.apache.spark.sql.types.{ArrayType, StructType}
+import raksit.example.spark.InitSpark
 
 import scala.annotation.tailrec
 import scala.io.Source

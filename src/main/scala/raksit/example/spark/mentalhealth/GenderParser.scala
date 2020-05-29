@@ -1,4 +1,4 @@
-package raksit.example.spark
+package raksit.example.spark.mentalhealth
 
 object GenderParser {
 
