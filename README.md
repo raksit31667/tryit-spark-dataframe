@@ -1,4 +1,6 @@
-# _Spark-Gradle-Template_
+# example-spark-gradle
+Originated from https://github.com/faizanahemad/spark-gradle-template  
+
 A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sparkContext` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
 
 ## Prerequisites
@@ -9,7 +11,7 @@ A barebones project with scala, apache spark built using gradle. Spark-shell pro
 ## Build and Demo process
 
 ### Clone the Repo
-`git clone https://github.com/faizanahemad/spark-gradle-template.git`
+`git clone https://github.com/raksit31667/example-spark-gradle.git`
 
 ### Build
 `./gradlew clean build`
@@ -83,7 +85,7 @@ object Main extends InitSpark {
 Just import it into your favorite IDE as a gradle project. Tested with IntelliJ to work. Or use your favorite editor and build from command line with gradle.
 
 ## Libraries Included
-- Spark - 2.1.0
+- Spark - 2.4.5
 
 ## Useful Links
 - [Spark Docs - Root Page](http://spark.apache.org/docs/latest/)
@@ -93,5 +95,4 @@ Just import it into your favorite IDE as a gradle project. Tested with IntelliJ 
  
 ## Issues or Suggestions
 
-- Raise one on github
-- Send me a mail -> fahemad3+github @ gmail dot com (Remove the spaces and dot = .)
+- Raise one on GitHub
