@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.github.alisiikh.scalastyle" version "3.4.0"
 }
 
 group "raksit.example.spark"
@@ -64,7 +65,7 @@ jar {
                 "Implementation-Version": getArchiveVersion(),
                 "Main-Class": mainClassFile
     }
-    include{sourceSets.main.output.classesDir}
+    include { sourceSets.main.output.classesDir }
     zip64 true
 }
 
@@ -80,6 +81,20 @@ idea {
     module {
         // IntelliJ does not know about the standard idiom of provided as used in managing
         // uber/shaded jar dependencies. Make it so!
-        scopes.PROVIDED.plus += [ configurations.provided ]
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+scalastyle {
+    scalaVersion = '2.11'
+    scalastyleVersion = '1.4.0'
+    config = file("${projectDir}/config/scalastyle/scalastyle_config.xml")
+    sourceSets {
+        main {
+            output = file("$project.buildDir/reports/scalastyle/main.xml")
+        }
+        test {
+            output = file("$project.buildDir/reports/scalastyle/test.xml")
+        }
     }
 }
