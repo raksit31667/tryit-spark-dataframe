@@ -1,11 +1,12 @@
 package raksit.example.spark.json
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.types.{LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row}
 import org.scalatest.FunSuite
+import raksit.example.spark.InitSpark
 
-class NestedJsonExpanderTest extends FunSuite with DataFrameSuiteBase {
+class NestedJsonExpanderTest extends FunSuite with InitSpark {
+
   test("should return expanded dataframe when getDataFrameFromNestedJson given nested json path") {
     // When
     val actualDataFrame: DataFrame = NestedJsonExpander.getDataFrameFromNestedJson("/nested.json")
@@ -27,8 +28,8 @@ class NestedJsonExpanderTest extends FunSuite with DataFrameSuiteBase {
       Row(1L, "TWO", 21L, "k3", "v3", "33", "EQR", 1548176931466L),
       Row(1L, "TWO", 21L, "k4", "v4", "33", "EQR", 1548176931466L)
     )
-    val expectedDataFrame: DataFrame = spark.createDataFrame(sc.parallelize(expectedData), expectedSchema)
-    assertDataFrameNoOrderEquals(expectedDataFrame, actualDataFrame)
+    val expectedDataFrame: DataFrame = spark.createDataFrame(sparkContext.parallelize(expectedData), expectedSchema)
+    assert(expectedDataFrame === actualDataFrame)
   }
 
   test("should return expanded dataframe when getDataFrameFromNestedJson given partially expanded json path") {
@@ -52,8 +53,8 @@ class NestedJsonExpanderTest extends FunSuite with DataFrameSuiteBase {
       Row(1L, "TWO", 21L, "k3", "v3", "33", "EQR", 1548176931466L),
       Row(1L, "TWO", 21L, "k4", "v4", "33", "EQR", 1548176931466L)
     )
-    val expectedDataFrame: DataFrame = spark.createDataFrame(sc.parallelize(expectedData), expectedSchema)
-    assertDataFrameNoOrderEquals(expectedDataFrame, actualDataFrame)
+    val expectedDataFrame: DataFrame = spark.createDataFrame(sparkContext.parallelize(expectedData), expectedSchema)
+    assert(expectedDataFrame === actualDataFrame)
   }
 
   test("should return same dataframe when getDataFrameFromNestedJson given already expanded json path") {
@@ -77,7 +78,7 @@ class NestedJsonExpanderTest extends FunSuite with DataFrameSuiteBase {
       Row(1L, "TWO", 21L, "k3", "v3", "33", "EQR", 1548176931466L),
       Row(1L, "TWO", 21L, "k4", "v4", "33", "EQR", 1548176931466L)
     )
-    val expectedDataFrame: DataFrame = spark.createDataFrame(sc.parallelize(expectedData), expectedSchema)
-    assertDataFrameNoOrderEquals(expectedDataFrame, actualDataFrame)
+    val expectedDataFrame: DataFrame = spark.createDataFrame(sparkContext.parallelize(expectedData), expectedSchema)
+    assert(expectedDataFrame === actualDataFrame)
   }
 }

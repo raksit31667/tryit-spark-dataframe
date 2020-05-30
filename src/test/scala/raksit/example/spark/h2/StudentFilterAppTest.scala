@@ -1,10 +1,10 @@
 package raksit.example.spark.h2
 
-import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.sql.DataFrame
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
+import raksit.example.spark.InitSpark
 
-class StudentFilterAppTest extends FunSuite with DataFrameSuiteBase {
+class StudentFilterAppTest extends FunSuite with BeforeAndAfterAll with InitSpark {
 
   import spark.implicits._
 
@@ -24,7 +24,7 @@ class StudentFilterAppTest extends FunSuite with DataFrameSuiteBase {
 
     // Then
     val expected: DataFrame = Seq(("Cala", "Konrad")).toDF("first_name", "last_name")
-    assertDataFrameNoOrderEquals(expected, actual)
+    assert(expected === actual)
   }
 
   test("should return only male dataframe when filter by gender given gender is male") {
@@ -33,7 +33,7 @@ class StudentFilterAppTest extends FunSuite with DataFrameSuiteBase {
 
     // Then
     val expected: DataFrame = Seq(("John", "Doe")).toDF("first_name", "last_name")
-    assertDataFrameNoOrderEquals(expected, actual)
+    assert(expected === actual)
   }
 
   test("should return empty dataframe when filter by gender given gender is neither male nor female") {
