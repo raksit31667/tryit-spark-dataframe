@@ -1,6 +1,5 @@
 plugins {
     id "java"
-    id "com.github.johnrengelman.shadow" version "5.2.0"
     id "com.github.alisiikh.scalastyle" version "3.4.0"
 }
 
@@ -56,25 +55,6 @@ task run(type: JavaExec, dependsOn: classes) {
     main = mainClassFile
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.runtime
-}
-
-jar {
-    archiveClassifier.set("all")
-    manifest {
-        attributes "Implementation-Title": title,
-                "Implementation-Version": getArchiveVersion(),
-                "Main-Class": mainClassFile
-    }
-    include { sourceSets.main.output.classesDir }
-    zip64 true
-}
-
-shadowJar {
-    archiveClassifier.set("shadow")
-    append "reference.conf"
-    dependencies {
-
-    }
 }
 
 idea {
