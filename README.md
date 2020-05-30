@@ -22,7 +22,7 @@ A barebones project with scala, apache spark built using gradle. Spark-shell pro
 
 
 ## What the demo does?
-Take a look at *src->main->scala->template->spark* directory
+Take a look at *src -> main -> scala -> raksit -> example -> spark* directory
 
 We have two Items here. 
 
