@@ -8,7 +8,6 @@ import pureconfig.generic.auto._
 object StudentRepository {
 
   def findByGender(gender: String)(implicit sqlContext: SQLContext): DataFrame = {
-
     val configuration: Either[ConfigReaderFailures, Configuration] =
       ConfigSource.default.load[Configuration]
 
@@ -18,7 +17,6 @@ object StudentRepository {
         sqlContext.emptyDataFrame
 
       case Right(configuration) =>
-        println(s"Using database ${configuration.database.url}")
         val sqlQuery =
           s"""
              |select first_name, last_name from student

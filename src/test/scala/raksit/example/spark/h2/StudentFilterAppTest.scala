@@ -10,11 +10,11 @@ class StudentFilterAppTest extends FunSuite with DataFrameSuiteBase {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    H2DatabaseTestPreparer.createStudentTable()
+    H2DatabaseTestPreparer.executeSqlFile("create_student_table.sql")
   }
 
   override def afterAll(): Unit = {
-    H2DatabaseTestPreparer.dropStudentTable()
+    H2DatabaseTestPreparer.executeSqlFile("drop_student_table.sql")
     super.afterAll()
   }
 
