@@ -1,9 +1,9 @@
 package raksit.example.spark
 
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.functions.avg
 
 object Main extends InitSpark {
-  def main(args: Array[String]) = {
+  def main(args: Array[String]): Unit = {
     import spark.implicits._
 
     val version = spark.version
