@@ -3,6 +3,7 @@ plugins {
     id "jacoco"
     id "com.github.maiflai.scalatest" version "0.25"
     id "com.github.alisiikh.scalastyle" version "3.4.0"
+    id "io.github.cosmicsilence.scalafix" version "0.1.1"
 }
 
 group "raksit.example.spark"
@@ -83,6 +84,10 @@ scalastyle {
     }
 }
 
+scalafix {
+    configFile = file("${projectDir}/config/scalafix/.scalafix.conf")
+}
+
 test {
     maxParallelForks(1)
 }
@@ -121,4 +126,7 @@ check.dependsOn(jacocoTestCoverageVerification)
 jacocoTestCoverageVerification.dependsOn(jacocoTestReport)
 tasks.withType(Test) {
     task -> jacocoTestReport.dependsOn(task)
+}
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = [ "-Ywarn-unused-import", "-Ywarn-adapted-args" ]
 }
