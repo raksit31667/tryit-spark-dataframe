@@ -1,4 +1,6 @@
 # example-spark-gradle
+![Spark Gradle CI](https://github.com/raksit31667/example-spark-gradle/workflows/Spark%20Gradle%20CI/badge.svg)
+
 Originated from https://github.com/faizanahemad/spark-gradle-template  
 
 A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sparkContext` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
