@@ -33,9 +33,7 @@ object WordCountStreamingApp extends InitSpark {
     }
 
     val text = messages.map(_.value())
-    text.print() // Hello world
-    val words = text.flatMap(_.split(" "))
-    val wordCounts = words.map(x => (x, 1L)).reduceByKey(_+_)
+    val wordCounts = WordCounter.count(text)
 
     wordCounts.print() // (Hello,1) (world,1)
 
