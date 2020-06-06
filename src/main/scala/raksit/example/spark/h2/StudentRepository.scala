@@ -4,6 +4,7 @@ import org.apache.spark.sql.{DataFrame, SQLContext}
 import pureconfig.ConfigSource
 import pureconfig.error.ConfigReaderFailures
 import pureconfig.generic.auto._
+import raksit.example.spark.config.Configuration
 
 object StudentRepository {
 

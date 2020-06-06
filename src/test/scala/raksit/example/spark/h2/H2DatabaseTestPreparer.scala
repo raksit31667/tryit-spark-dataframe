@@ -1,10 +1,12 @@
 package raksit.example.spark.h2
 
 import java.nio.charset.StandardCharsets
+
 import org.h2.tools.RunScript
 import pureconfig.ConfigSource
 import pureconfig.error.ConfigReaderFailures
 import pureconfig.generic.auto._
+import raksit.example.spark.config.Configuration
 
 object H2DatabaseTestPreparer {
 
