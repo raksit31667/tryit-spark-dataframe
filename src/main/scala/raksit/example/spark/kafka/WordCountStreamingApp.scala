@@ -5,16 +5,16 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.TaskContext
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, HasOffsetRanges, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import pureconfig.{ConfigReader, ConfigSource}
-import pureconfig.generic.auto._
 import raksit.example.spark.InitSpark
-import raksit.example.spark.config.Configuration
+import raksit.example.spark.config.KafkaConfiguration
+
 
 object WordCountStreamingApp extends InitSpark {
-  def main(args: Array[String]): Unit = {
+
+  def getContext(configuration: KafkaConfiguration): StreamingContext = {
     val streamingContext = new StreamingContext(sparkContext, Seconds(10))
     val topics = Set("wordcount")
-    val kafkaParameters = getKafkaParameters
+    val kafkaParameters = getKafkaParameters(configuration)
 
     val messages = KafkaUtils.createDirectStream[String, String](
       streamingContext,
@@ -32,29 +32,18 @@ object WordCountStreamingApp extends InitSpark {
 
     val text = messages.map(_.value())
     val wordCounts = WordCounter.count(text)
-
     wordCounts.print() // (Hello,1) (world,1)
 
-    streamingContext.start()
-    streamingContext.awaitTermination()
+    streamingContext
   }
 
-  private def getKafkaParameters: Map[String, Object] = {
-    val configuration: ConfigReader.Result[Configuration] =
-      ConfigSource.default.load[Configuration]
-
-    configuration match {
-      case Left(exception) =>
-        exception.toList.foreach(println)
-        throw new RuntimeException("Test configuration is missing...")
-
-      case Right(configuration) =>
-        Map[String, Object](
-          ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> configuration.kafka.bootstrapServer,
-          ConsumerConfig.GROUP_ID_CONFIG -> configuration.kafka.groupId,
-          ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
-          ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer]
-        )
-    }
+  private def getKafkaParameters(configuration: KafkaConfiguration): Map[String, Object] = {
+    Map[String, Object](
+      ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> configuration.bootstrapServers,
+      ConsumerConfig.GROUP_ID_CONFIG -> configuration.groupId,
+      ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
+      ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG -> classOf[StringDeserializer],
+      ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -> "earliest"
+    )
   }
 }
