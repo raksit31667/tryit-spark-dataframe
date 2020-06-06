@@ -5,8 +5,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.TaskContext
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, HasOffsetRanges, KafkaUtils, LocationStrategies}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import pureconfig.ConfigSource
-import pureconfig.error.ConfigReaderFailures
+import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.auto._
 import raksit.example.spark.InitSpark
 import raksit.example.spark.config.Configuration
@@ -41,7 +40,7 @@ object WordCountStreamingApp extends InitSpark {
   }
 
   private def getKafkaParameters: Map[String, Object] = {
-    val configuration: Either[ConfigReaderFailures, Configuration] =
+    val configuration: ConfigReader.Result[Configuration] =
       ConfigSource.default.load[Configuration]
 
     configuration match {

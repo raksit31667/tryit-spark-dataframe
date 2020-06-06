@@ -1,15 +1,14 @@
 package raksit.example.spark.h2
 
 import org.apache.spark.sql.{DataFrame, SQLContext}
-import pureconfig.ConfigSource
-import pureconfig.error.ConfigReaderFailures
+import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.auto._
 import raksit.example.spark.config.Configuration
 
 object StudentRepository {
 
   def findByGender(gender: String)(implicit sqlContext: SQLContext): DataFrame = {
-    val configuration: Either[ConfigReaderFailures, Configuration] =
+    val configuration: ConfigReader.Result[Configuration] =
       ConfigSource.default.load[Configuration]
 
     configuration match {
