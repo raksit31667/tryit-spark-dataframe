@@ -1,66 +1,43 @@
 package raksit.example.spark.kafka
 
-import java.util.Properties
+import com.holdenkarau.spark.testing.SharedSparkContext
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.scalatest.FunSuite
 
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
-import org.testcontainers.containers.KafkaContainer
-import pureconfig.{ConfigReader, ConfigSource}
-import pureconfig.generic.auto._
-import raksit.example.spark.config.KafkaConfiguration
+class WordCountStreamingAppTest extends FunSuite with KafkaStreamingSuiteBase with SharedSparkContext {
 
-class WordCountStreamingAppTest extends FunSuite with BeforeAndAfterEach {
+  var streamingContext: StreamingContext = _
 
-  var kafkaContainer: KafkaContainer = _
-  var bootstrapServers: String = _
-  var producer: KafkaProducer[String, String] = _
-
-  override protected def beforeEach(): Unit = {
+  override def beforeEach(): Unit = {
     super.beforeEach()
-    kafkaContainer = new KafkaContainer()
-    kafkaContainer.start()
-    val properties: Properties = new Properties()
-    bootstrapServers = kafkaContainer.getBootstrapServers.substring(12)
-    properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-    properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-    properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer")
-    producer = new KafkaProducer[String, String](properties)
+    streamingContext = new StreamingContext(sc, Seconds(1))
   }
 
-  override protected def afterEach(): Unit = {
-    producer.close()
-    kafkaContainer.stop()
+  override def afterEach(): Unit = {
     super.afterEach()
   }
 
   test("should stream word counting successfully") {
-    // When
-    val streamingContext = WordCountStreamingApp.getContext(getConfiguration)
+    // Given
+    val accumulator = sc.collectionAccumulator[(String, Long)]("wordcount")
     val record = new ProducerRecord[String, String]("wordcount", "1", "Hello world")
     producer.send(record)
 
-    // Then
+    val messages = KafkaUtils.createDirectStream[String, String](
+      streamingContext,
+      LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[String, String](Set("wordcount"), getKafkaParameters)
+    )
+
+    // When
+    WordCountStreamingApp.runJob(accumulator, messages)
     streamingContext.start()
-    streamingContext.awaitTerminationOrTimeout(6000)
-  }
+    streamingContext.awaitTerminationOrTimeout(3000)
 
-  private def getConfiguration: KafkaConfiguration = {
-    val configuration: ConfigReader.Result[KafkaConfiguration] =
-      ConfigSource.string(
-        s"""
-          {
-            bootstrap-servers = "$bootstrapServers",
-            group-id = "test"
-          }
-      """).load[KafkaConfiguration]
-
-    configuration match {
-      case Left(exception) =>
-        exception.toList.foreach(println)
-        throw new RuntimeException("Test configuration is missing...")
-
-      case Right(configuration) =>
-        configuration
-    }
+    // Then
+    assert(accumulator.value.contains(("Hello", 1L)))
+    assert(accumulator.value.contains(("world", 1L)))
   }
 }
