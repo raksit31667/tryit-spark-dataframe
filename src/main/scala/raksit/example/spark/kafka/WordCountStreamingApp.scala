@@ -8,7 +8,6 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import raksit.example.spark.InitSpark
 import raksit.example.spark.config.KafkaConfiguration
 
-
 object WordCountStreamingApp extends InitSpark {
 
   def getContext(configuration: KafkaConfiguration): StreamingContext = {

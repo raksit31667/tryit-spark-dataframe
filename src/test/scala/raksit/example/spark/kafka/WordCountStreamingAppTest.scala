@@ -7,10 +7,9 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
 import org.testcontainers.containers.KafkaContainer
 import pureconfig.{ConfigReader, ConfigSource}
 import pureconfig.generic.auto._
-import raksit.example.spark.InitSpark
 import raksit.example.spark.config.KafkaConfiguration
 
-class WordCountStreamingAppTest extends FunSuite with BeforeAndAfterEach with InitSpark {
+class WordCountStreamingAppTest extends FunSuite with BeforeAndAfterEach {
 
   var kafkaContainer: KafkaContainer = _
   var bootstrapServers: String = _
