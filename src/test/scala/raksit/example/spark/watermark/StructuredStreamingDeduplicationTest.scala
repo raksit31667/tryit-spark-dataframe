@@ -4,13 +4,13 @@ import java.sql.Timestamp
 
 import com.holdenkarau.spark.testing.{DataFrameSuiteBase, HDFSCluster}
 import org.apache.spark.sql.Dataset
-import org.apache.spark.sql.functions.from_unixtime
 import org.apache.spark.sql.execution.streaming.MemoryStream
+import org.apache.spark.sql.functions.from_unixtime
 import org.apache.spark.sql.streaming.{OutputMode, StreamingQuery}
 import org.apache.spark.sql.types.TimestampType
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.FunSuite
 
-class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteBase with BeforeAndAfterEach {
+class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteBase {
 
   import spark.implicits._
 
@@ -19,8 +19,8 @@ class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteB
   private var watermarkStreaming: StreamingQuery = _
   private var hdfsCluster: HDFSCluster = _
 
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
+  override def beforeAll(): Unit = {
+    super.beforeAll()
     hdfsCluster = new HDFSCluster()
     hdfsCluster.startHDFS()
     events = MemoryStream[Event]
@@ -36,7 +36,7 @@ class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteB
       .start()
   }
 
-  override def afterEach(): Unit = {
+  override def afterAll(): Unit = {
     hdfsCluster.shutdownHDFS()
     super.afterAll()
   }
@@ -47,10 +47,8 @@ class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteB
   }
 
   test("should return added event when processAllAvailable given new event with Thursday, 11 June 2020 03:58:21 UTC") {
-    // Given
-    events.addData(Event(1591847901L, "aaa"))
-
     // When
+    events.addData(Event(1591847901L, "aaa"))
     watermarkStreaming.processAllAvailable()
     val parquetFileDF = spark.read.parquet(hdfsCluster.getNameNodeURI() + "/streaming")
     parquetFileDF.createOrReplaceTempView("testStreaming")
@@ -58,6 +56,109 @@ class StructuredStreamingDeduplicationTest extends FunSuite with DataFrameSuiteB
 
     // Then
     val expected = Seq((1591847901L, "aaa", Timestamp.valueOf("2020-06-11 10:58:21"))).toDF("time", "data", "enqueuedTime")
+    assertDataFrameDataEquals(expected, actual)
+  }
+
+  test("should return 2 events when processAllAvailable given new event with Thursday, 11 June 2020 03:58:26 UTC") {
+    // Given
+    events.addData(Event(1591847901L, "aaa"))
+    watermarkStreaming.processAllAvailable()
+
+    // When
+    events.addData(Event(1591847901L + 5, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    val parquetFileDF = spark.read.parquet(hdfsCluster.getNameNodeURI() + "/streaming")
+    parquetFileDF.createOrReplaceTempView("testStreaming")
+    val actual = spark.sql("select * from testStreaming")
+
+    // Then
+    val expected = Seq(
+      (1591847901L, "aaa", Timestamp.valueOf("2020-06-11 10:58:21")),
+      (1591847901L + 5, "bbb", Timestamp.valueOf("2020-06-11 10:58:26"))
+    ).toDF("time", "data", "enqueuedTime")
+
+    assertDataFrameDataEquals(expected, actual)
+  }
+
+  test("should return 4 events when processAllAvailable given new event with Thursday, 11 June 2020 03:58:31 and 03:58:36 UTC") {
+    // Given
+    events.addData(Event(1591847901L, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    events.addData(Event(1591847901L + 5, "aaa"))
+    watermarkStreaming.processAllAvailable()
+
+    // When
+    events.addData(Event(1591847901L + 10, "ccc"))
+    events.addData(Event(1591847901L + 15, "ddd"))
+    watermarkStreaming.processAllAvailable()
+    val parquetFileDF = spark.read.parquet(hdfsCluster.getNameNodeURI() + "/streaming")
+    parquetFileDF.createOrReplaceTempView("testStreaming")
+    val actual = spark.sql("select * from testStreaming")
+
+    // Then
+    val expected = Seq(
+      (1591847901L, "aaa", Timestamp.valueOf("2020-06-11 10:58:21")),
+      (1591847901L + 5, "bbb", Timestamp.valueOf("2020-06-11 10:58:26")),
+      (1591847901L + 10, "ccc", Timestamp.valueOf("2020-06-11 10:58:31")),
+      (1591847901L + 15, "ddd", Timestamp.valueOf("2020-06-11 10:58:36"))
+    ).toDF("time", "data", "enqueuedTime")
+
+    assertDataFrameDataEquals(expected, actual)
+  }
+
+  test("should return 4 events when processAllAvailable given duplicated event with Thursday, 11 June 2020 03:58:21 UTC") {
+    // Given
+    events.addData(Event(1591847901L, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    events.addData(Event(1591847901L + 5, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    events.addData(Event(1591847901L + 10, "ccc"))
+    events.addData(Event(1591847901L + 15, "ddd"))
+    watermarkStreaming.processAllAvailable()
+
+    // When
+    events.addData(Event(1591847901L, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    val parquetFileDF = spark.read.parquet(hdfsCluster.getNameNodeURI() + "/streaming")
+    parquetFileDF.createOrReplaceTempView("testStreaming")
+    val actual = spark.sql("select * from testStreaming")
+
+    // Then
+    val expected = Seq(
+      (1591847901L, "aaa", Timestamp.valueOf("2020-06-11 10:58:21")),
+      (1591847901L + 5, "bbb", Timestamp.valueOf("2020-06-11 10:58:26")),
+      (1591847901L + 10, "ccc", Timestamp.valueOf("2020-06-11 10:58:31")),
+      (1591847901L + 15, "ddd", Timestamp.valueOf("2020-06-11 10:58:36"))
+    ).toDF("time", "data", "enqueuedTime")
+
+    assertDataFrameDataEquals(expected, actual)
+  }
+
+  test("should return 4 events when processAllAvailable given late event with Thursday, 11 June 2020 03:58:11 UTC") {
+    // Given
+    events.addData(Event(1591847901L, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    events.addData(Event(1591847901L + 5, "aaa"))
+    watermarkStreaming.processAllAvailable()
+    events.addData(Event(1591847901L + 10, "ccc"))
+    events.addData(Event(1591847901L + 15, "ddd"))
+    watermarkStreaming.processAllAvailable()
+
+    // When
+    events.addData(Event(1591847901L - 10, "eee"))
+    watermarkStreaming.processAllAvailable()
+    val parquetFileDF = spark.read.parquet(hdfsCluster.getNameNodeURI() + "/streaming")
+    parquetFileDF.createOrReplaceTempView("testStreaming")
+    val actual = spark.sql("select * from testStreaming")
+
+    // Then
+    val expected = Seq(
+      (1591847901L, "aaa", Timestamp.valueOf("2020-06-11 10:58:21")),
+      (1591847901L + 5, "bbb", Timestamp.valueOf("2020-06-11 10:58:26")),
+      (1591847901L + 10, "ccc", Timestamp.valueOf("2020-06-11 10:58:31")),
+      (1591847901L + 15, "ddd", Timestamp.valueOf("2020-06-11 10:58:36"))
+    ).toDF("time", "data", "enqueuedTime")
+
     assertDataFrameDataEquals(expected, actual)
   }
 }
