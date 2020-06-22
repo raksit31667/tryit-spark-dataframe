@@ -766,3 +766,6 @@ gradle-app.setting
 ### IPythonNotebook template
 # Temporary data
 .ipynb_checkpoints/
+
+# Checkpoints
+checkpoints
