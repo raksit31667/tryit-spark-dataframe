@@ -41,7 +41,7 @@ class OrderAggregatorTest extends FunSuite with DataFrameSuiteBase {
     "client id and some validation flags false") {
     // Given
     val input = Seq((123456, "abcd", 2, 100, false, true), (987654, "abcd", 3, 80, true, false))
-      .toDF("orderId", "clientId", "subtotal", "_isValidOrderId", "_isValidPriceAndAmount")
+      .toDF("orderId", "clientId", "amount", "price", "_isValidOrderId", "_isValidPriceAndAmount")
 
     // When
     val actual = OrderAggregator.collectOrdersByClientId(input)
