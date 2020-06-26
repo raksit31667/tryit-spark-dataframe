@@ -74,7 +74,7 @@ idea {
 }
 
 scalastyle {
-    scalaVersion = "2.11"
+    scalaVersion = "2.13.3"
     scalastyleVersion = "1.4.0"
     config = file("${projectDir}/config/scalastyle/scalastyle_config.xml")
     sourceSets {
