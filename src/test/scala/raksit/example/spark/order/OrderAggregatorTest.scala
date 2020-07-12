@@ -14,7 +14,7 @@ class OrderAggregatorTest extends FunSuite with DataFrameSuiteBase {
       .toDF("orderId", "clientId", "amount", "price", "_isValidOrderId", "_isValidPriceAndAmount")
 
     // When
-    val actual = OrderAggregator.collectOrdersByClientId(input)
+    val actual = OrderAggregator.collectOrdersByClientId().apply(input)
 
     // Then
     val expected = Seq((Array(123456, 987654), "abcd", 440L, true, true))
@@ -29,7 +29,7 @@ class OrderAggregatorTest extends FunSuite with DataFrameSuiteBase {
       .toDF("orderId", "clientId", "amount", "price", "_isValidOrderId", "_isValidPriceAndAmount")
 
     // When
-    val actual = OrderAggregator.collectOrdersByClientId(input)
+    val actual = OrderAggregator.collectOrdersByClientId().apply(input)
 
     // Then
     val expected = Seq((Array(123456, 987654), "abcd", 240L, false, false))
@@ -44,7 +44,7 @@ class OrderAggregatorTest extends FunSuite with DataFrameSuiteBase {
       .toDF("orderId", "clientId", "amount", "price", "_isValidOrderId", "_isValidPriceAndAmount")
 
     // When
-    val actual = OrderAggregator.collectOrdersByClientId(input)
+    val actual = OrderAggregator.collectOrdersByClientId().apply(input)
 
     // Then
     val expected = Seq((Array(123456, 987654), "abcd", 440L, false, false))

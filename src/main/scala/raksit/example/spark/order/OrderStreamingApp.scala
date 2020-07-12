@@ -43,10 +43,8 @@ object OrderStreamingApp extends InitSpark {
   }
 
   def processOrder(orderDataFrame: DataFrame): DataFrame = {
-    val orderDataFrameWithValidIdFlag = addValidOrderIdFlag(orderDataFrame)
-    val orderDataFrameWithValidPriceAndAmountFlag = addValidPriceAndAmountFlag(orderDataFrameWithValidIdFlag)
-    val aggregatedOrderDataFrame = collectOrdersByClientId(orderDataFrameWithValidPriceAndAmountFlag)
-    aggregatedOrderDataFrame
-
+    addValidOrderIdFlag() andThen
+      addValidPriceAndAmountFlag() andThen
+      collectOrdersByClientId() apply orderDataFrame
   }
 }

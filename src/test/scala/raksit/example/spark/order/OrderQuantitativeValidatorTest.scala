@@ -12,7 +12,7 @@ class OrderQuantitativeValidatorTest extends FunSuite with DataFrameSuiteBase {
     val input = Seq((123456, "abcd", 2, 100)).toDF("orderId", "clientId", "amount", "price")
 
     // When
-    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag(input)
+    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag().apply(input)
 
     // Then
     val expected = Seq((123456, "abcd", 2, 100, true)).toDF("orderId", "clientId", "amount", "price", "_isValidPriceAndAmount")
@@ -24,7 +24,7 @@ class OrderQuantitativeValidatorTest extends FunSuite with DataFrameSuiteBase {
     val input = Seq((234567, "abcd", 0, 0)).toDF("orderId", "clientId", "amount", "price")
 
     // When
-    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag(input)
+    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag().apply(input)
 
     // Then
     val expected = Seq((234567, "abcd", 0, 0, false)).toDF("orderId", "clientId", "amount", "price", "_isValidPriceAndAmount")
@@ -36,7 +36,7 @@ class OrderQuantitativeValidatorTest extends FunSuite with DataFrameSuiteBase {
     val input = Seq((null, "abcd", -1, -99)).toDF("orderId", "clientId", "amount", "price")
 
     // When
-    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag(input)
+    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag().apply(input)
 
     // Then
     val expected = Seq((null, "abcd", -1, -99, false)).toDF("orderId", "clientId", "amount", "price", "_isValidPriceAndAmount")
@@ -49,7 +49,7 @@ class OrderQuantitativeValidatorTest extends FunSuite with DataFrameSuiteBase {
     val input = Seq((null, "abcd", 2, -100)).toDF("orderId", "clientId", "amount", "price")
 
     // When
-    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag(input)
+    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag().apply(input)
 
     // Then
     val expected = Seq((null, "abcd", 2, -100, false)).toDF("orderId", "clientId", "amount", "price", "_isValidPriceAndAmount")
@@ -62,7 +62,7 @@ class OrderQuantitativeValidatorTest extends FunSuite with DataFrameSuiteBase {
     val input = Seq((null, "abcd", -3, 80)).toDF("orderId", "clientId", "amount", "price")
 
     // When
-    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag(input)
+    val actual = OrderQuantitativeValidator.addValidPriceAndAmountFlag().apply(input)
 
     // Then
     val expected = Seq((null, "abcd", -3, 80, false)).toDF("orderId", "clientId", "amount", "price", "_isValidPriceAndAmount")
