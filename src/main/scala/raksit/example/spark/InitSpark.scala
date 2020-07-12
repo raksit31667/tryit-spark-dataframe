@@ -13,6 +13,10 @@ trait InitSpark {
   val sparkContext = spark.sparkContext
   val sqlContext = spark.sqlContext
 
+  def initSession(): Void => SparkSession = {
+    _ => spark
+  }
+
   def reader: DataFrameReader = spark.read
     .option("header", true)
     .option("inferSchema", true)

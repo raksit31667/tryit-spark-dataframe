@@ -14,17 +14,13 @@ object OrderStreamingApp extends InitSpark {
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    initSpark() andThen fromKafka() andThen processOrder andThen sendBackToKafka()
+    initSession() andThen fromKafka() andThen processOrder andThen sendBackToKafka()
   }
 
   def processOrder(orderDataFrame: DataFrame): DataFrame = {
     addValidOrderIdFlag() andThen
       addValidPriceAndAmountFlag() andThen
       collectOrdersByClientId() apply orderDataFrame
-  }
-
-  private def initSpark(): Void => SparkSession = {
-    _ => spark
   }
 
   private def fromKafka(): SparkSession => DataFrame = {
