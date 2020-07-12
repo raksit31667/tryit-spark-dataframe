@@ -4,6 +4,9 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.functions.{col, from_json}
 import raksit.example.spark.InitSpark
+import raksit.example.spark.order.OrderAggregator.collectOrdersByClientId
+import raksit.example.spark.order.OrderIdValidator.addValidOrderIdFlag
+import raksit.example.spark.order.OrderQuantitativeValidator.addValidPriceAndAmountFlag
 
 object OrderStreamingApp extends InitSpark {
 
@@ -40,9 +43,10 @@ object OrderStreamingApp extends InitSpark {
   }
 
   def processOrder(orderDataFrame: DataFrame): DataFrame = {
-    val orderDataFrameWithValidIdFlag = OrderIdValidator.addValidOrderIdFlag(orderDataFrame)
-    val orderDataFrameWithValidPriceAndAmountFlag = OrderQuantitativeValidator.addValidPriceAndAmountFlag(orderDataFrameWithValidIdFlag)
-    val aggregatedOrderDataFrame = OrderAggregator.collectOrdersByClientId(orderDataFrameWithValidPriceAndAmountFlag)
+    val orderDataFrameWithValidIdFlag = addValidOrderIdFlag(orderDataFrame)
+    val orderDataFrameWithValidPriceAndAmountFlag = addValidPriceAndAmountFlag(orderDataFrameWithValidIdFlag)
+    val aggregatedOrderDataFrame = collectOrdersByClientId(orderDataFrameWithValidPriceAndAmountFlag)
     aggregatedOrderDataFrame
+
   }
 }
