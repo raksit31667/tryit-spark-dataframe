@@ -7,14 +7,14 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object KafkaStreamingManager {
 
-  def fromKafka(schema: StructType): SparkSession => DataFrame = {
+  def fromKafka(schema: StructType, topic: String): SparkSession => DataFrame = {
     spark =>
       import spark.implicits._
 
       spark.readStream
         .format("kafka")
         .option("kafka.bootstrap.servers", "localhost:9092")
-        .option("subscribe", "order")
+        .option("subscribe", topic)
         .load()
         .selectExpr("CAST (value AS STRING)").as[String]
         .select(from_json(col("value"), schema))

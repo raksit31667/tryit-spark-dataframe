@@ -12,7 +12,7 @@ object OrderStreamingApp extends InitSpark {
 
   def main(args: Array[String]): Unit = {
     initSession() andThen
-      fromKafka(getOrderSchema) andThen
+      fromKafka(getOrderSchema, "order") andThen
       processOrder andThen
       sendBackToKafka("order_aggregated")
   }
