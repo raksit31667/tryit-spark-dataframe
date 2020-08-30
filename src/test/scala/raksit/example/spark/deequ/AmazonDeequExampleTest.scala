@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 
 class AmazonDeequExampleTest extends FunSuite with DataFrameSuiteBase {
 
-  test("it should print failed constriant from verification result when run given test dataset") {
+  test("it should print failed constriant from verification result when verify by columns given test dataset") {
     // Given
     val rdd = spark.sparkContext.parallelize(Seq(
       Item(1, "Thingy A", "awesome thing.", "high", 0),
@@ -17,6 +17,23 @@ class AmazonDeequExampleTest extends FunSuite with DataFrameSuiteBase {
     val data = spark.createDataFrame(rdd)
 
     // When
-    AmazonDeequExample.run(data)
+    // Then
+    AmazonDeequExample.verifyByColumns(data)
+  }
+
+  test("it should print invalid rows when verify by row given test dataset") {
+    // Given
+    val rdd = spark.sparkContext.parallelize(Seq(
+      Item(1, "Thingy A", "awesome thing.", "high", 0),
+      Item(2, "Thingy B", "available at http://thingb.com", null, 0),
+      Item(3, null, null, "low", 5),
+      Item(4, "Thingy D", "checkout https://thingd.ca", "low", 10),
+      Item(5, "Thingy E", null, "high", 12)))
+
+    val data = spark.createDataFrame(rdd)
+
+    // When
+    // Then
+    AmazonDeequExample.verifyByRows(data)
   }
 }

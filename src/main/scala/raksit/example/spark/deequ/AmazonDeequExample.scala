@@ -4,12 +4,13 @@ import com.amazon.deequ.VerificationSuite
 import com.amazon.deequ.checks.{Check, CheckLevel, CheckStatus}
 import com.amazon.deequ.constraints.ConstraintStatus
 import com.amazon.deequ.profiles.ColumnProfilerRunner
+import com.amazon.deequ.schema.{RowLevelSchema, RowLevelSchemaValidator}
 import org.apache.spark.sql.DataFrame
 import raksit.example.spark.InitSpark
 
 object AmazonDeequExample extends InitSpark {
 
-  def run(dataFrame: DataFrame): Unit = {
+  def verifyByColumns(dataFrame: DataFrame): Unit = {
     val verificationResult = VerificationSuite()
       .onData(dataFrame)
       .addCheck(
@@ -47,5 +48,16 @@ object AmazonDeequExample extends InitSpark {
         case (key, entry) => println(s"\t$key occurred ${entry.absolute} times (ratio is ${entry.ratio})")
       }
     }
+  }
+
+  def verifyByRows(dataFrame: DataFrame): Unit = {
+    // Row-level validation
+    val schema = RowLevelSchema()
+      .withIntColumn("id", isNullable = false)
+      .withStringColumn("priority", isNullable = false, matches = Option("high|low"))
+      .withIntColumn("numViews", minValue = Option(0))
+
+    val verificationResult = RowLevelSchemaValidator.validate(dataFrame, schema)
+    verificationResult.invalidRows.show()
   }
 }
