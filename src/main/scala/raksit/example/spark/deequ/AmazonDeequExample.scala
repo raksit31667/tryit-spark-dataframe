@@ -10,6 +10,10 @@ import raksit.example.spark.InitSpark
 
 object AmazonDeequExample extends InitSpark {
 
+  /**
+   * Column-level verification
+   * @param dataFrame DataFrame
+   */
   def verifyByColumns(dataFrame: DataFrame): Unit = {
     val verificationResult = VerificationSuite()
       .onData(dataFrame)
@@ -18,12 +22,11 @@ object AmazonDeequExample extends InitSpark {
           .isComplete("id")
           .isUnique("id")
           .isComplete("productName")
+          .isComplete("priority")
           .isContainedIn("priority", Array("high", "low"))
-          .isNonNegative("numViews")
-          .containsURL("description", _ >= 0.5))
+          .isNonNegative("numViews"))
       .run()
 
-    // Constraint verification
     if (verificationResult.status == CheckStatus.Success) {
       println("The data passed the test, everything is fine!")
     } else {
@@ -50,8 +53,11 @@ object AmazonDeequExample extends InitSpark {
     }
   }
 
+  /**
+   * Row-level verification
+   * @param dataFrame DataFrame
+   */
   def verifyByRows(dataFrame: DataFrame): Unit = {
-    // Row-level validation
     val schema = RowLevelSchema()
       .withIntColumn("id", isNullable = false)
       .withStringColumn("priority", isNullable = false, matches = Option("high|low"))

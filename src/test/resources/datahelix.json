@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "name": "id",
+      "type": "integer",
+      "unique": true
+    },
+    {
+      "name": "productName",
+      "type": "firstname",
+      "nullable": true
+    },
+    {
+      "name": "description",
+      "type": "fullname",
+      "nullable": true
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "numViews",
+      "type": "integer"
+    }
+  ],
+  "constraints": [
+    {
+      "field": "id",
+      "greaterThanOrEqualTo": 0
+    },
+    {
+      "field": "id",
+      "lessThanOrEqualTo": 100
+    },
+    {
+      "field": "priority",
+      "matchingRegex": "high|low"
+    },
+    {
+      "field": "numViews",
+      "greaterThanOrEqualTo": 0
+    },
+    {
+      "field": "numViews",
+      "lessThanOrEqualTo": 1000
+    }
+  ]
+}
