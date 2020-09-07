@@ -10,10 +10,6 @@ import raksit.example.spark.InitSpark
 
 object AmazonDeequExample extends InitSpark {
 
-  /**
-   * Column-level verification
-   * @param dataFrame DataFrame
-   */
   def verifyByColumns(dataFrame: DataFrame): Unit = {
     val verificationResult = VerificationSuite()
       .onData(dataFrame)
@@ -39,8 +35,19 @@ object AmazonDeequExample extends InitSpark {
         .filter { _.status != ConstraintStatus.Success }
         .foreach { result => println(s"${result.constraint}: ${result.message.get}") }
     }
+  }
 
-    // Column statistics
+  def verifyByRows(dataFrame: DataFrame): Unit = {
+    val schema = RowLevelSchema()
+      .withIntColumn("id", isNullable = false)
+      .withStringColumn("priority", isNullable = false, matches = Option("high|low"))
+      .withIntColumn("numViews", minValue = Option(0))
+
+    val verificationResult = RowLevelSchemaValidator.validate(dataFrame, schema)
+    verificationResult.invalidRows.show()
+  }
+
+  def seeColumnStatistic(dataFrame: DataFrame): Unit = {
     val columnProfilingResult = ColumnProfilerRunner()
       .onData(dataFrame)
       .run()
@@ -51,19 +58,5 @@ object AmazonDeequExample extends InitSpark {
         case (key, entry) => println(s"\t$key occurred ${entry.absolute} times (ratio is ${entry.ratio})")
       }
     }
-  }
-
-  /**
-   * Row-level verification
-   * @param dataFrame DataFrame
-   */
-  def verifyByRows(dataFrame: DataFrame): Unit = {
-    val schema = RowLevelSchema()
-      .withIntColumn("id", isNullable = false)
-      .withStringColumn("priority", isNullable = false, matches = Option("high|low"))
-      .withIntColumn("numViews", minValue = Option(0))
-
-    val verificationResult = RowLevelSchemaValidator.validate(dataFrame, schema)
-    verificationResult.invalidRows.show()
   }
 }
