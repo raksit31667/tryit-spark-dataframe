@@ -31,10 +31,6 @@
       "greaterThanOrEqualTo": 0
     },
     {
-      "field": "id",
-      "lessThanOrEqualTo": 100
-    },
-    {
       "field": "priority",
       "matchingRegex": "high|low"
     },
