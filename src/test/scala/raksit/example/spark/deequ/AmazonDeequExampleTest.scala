@@ -32,7 +32,7 @@ class AmazonDeequExampleTest extends FunSuite with DataFrameSuiteBase {
     // When
     // Then
     val t0 = System.nanoTime()
-    AmazonDeequExample.verifyByColumns(data)
+    AmazonDeequExample.seeColumnStatistic(data)
     val t1 = System.nanoTime()
     println("Elapsed time: " + (t1 - t0) / math.pow(10, 9) + "s")
   }
