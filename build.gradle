@@ -56,7 +56,7 @@ dependencies {
     testImplementation "com.holdenkarau:spark-testing-base_2.11:${sparkVersion}_0.14.0"
     testImplementation "com.h2database:h2:1.4.200"
     testImplementation "org.testcontainers:testcontainers:1.14.3"
-    testImplementation "org.testcontainers:kafka:1.14.3"
+    testImplementation "org.testcontainers:kafka:1.15.2"
     testRuntime "org.pegdown:pegdown:1.6.0"
 }
 
